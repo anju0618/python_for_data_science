@@ -1,5 +1,4 @@
-.pdf
-*/.pdf
+*.pdf
 .venv/
 __pycache__/
 .mypy_cache/
