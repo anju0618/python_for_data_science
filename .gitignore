@@ -1,2 +1,7 @@
 .pdf
 */.pdf
+.venv/
+__pycache__/
+.mypy_cache/
+**/ex*/tester.py
+**/ex*/test_array2D.py
