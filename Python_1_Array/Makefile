@@ -73,4 +73,10 @@ ft_grey(array)
 print(ft_invert.__doc__)
 endef
 
-include ../tester.mk
+# `make tester` writes ex<nn>/tester.py from CASES_<nn> (the tester shown in the subject).
+# Do not use a dollar sign in the macros (make would expand it).
+tester:
+	@$(foreach n,$(EXS),$(file >ex$(n)/tester.py,$(CASES_$(n))))
+	@echo "tester.py generated in: $(addprefix ex,$(EXS))"
+
+.PHONY: tester
