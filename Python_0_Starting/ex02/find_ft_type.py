@@ -3,6 +3,7 @@ from typing import Any
 
 
 def all_thing_is_obj(object: Any) -> int:
+    """Print the type of object and return 42."""
     if isinstance(object, list):
         print(f"List : {type(object)}")
         return 42

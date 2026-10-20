@@ -6,15 +6,13 @@ SCRIPT_02 := aff_pop.py
 SCRIPT_03 := projection_life.py
 
 NUMS := 00 01 02 03
+EXS := 00
 RUNS := $(addprefix run-,$(NUMS))
 
-.PHONY: install tester lint clean fclean $(RUNS)
+.PHONY: install lint clean fclean $(RUNS)
 
 install:
 	uv sync
-
-tester:
-	@for d in testers/ex*/; do cp -f $$d* $${d#testers/}; done
 
 lint:
 	uv run flake8 --exclude=.venv .
@@ -36,3 +34,10 @@ fclean: clean
 
 $(RUNS): run-%: tester
 	uv run python ex$*/$(SCRIPT_$*) $(ARGS)
+
+define CASES_00
+from load_csv import load
+print(load("life_expectancy_years.csv"))
+endef
+
+include ../tester.mk

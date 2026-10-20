@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=61,<69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ft_package"
+version = "0.0.1"
+description = "A sample test package"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "amakino" }, { email = "amakino@student.42tokyo.jp" }]
+requires-python = ">=3.10"
+
+[tool.setuptools]
+packages = ["ft_package"]

@@ -7,15 +7,13 @@ SCRIPT_03 := tester.py
 SCRIPT_04 := tester.py
 
 NUMS := 00 01 02 03 04
+EXS := 00 01 02 03 04
 RUNS := $(addprefix run-,$(NUMS))
 
-.PHONY: install tester lint clean fclean $(RUNS)
+.PHONY: install lint clean fclean $(RUNS)
 
 install:
 	uv sync
-
-tester:
-	@for d in testers/ex*/; do cp -f $$d* $${d#testers/}; done
 
 lint:
 	uv run flake8 --exclude=.venv .
@@ -37,3 +35,73 @@ fclean: clean
 
 $(RUNS): run-%: tester
 	uv run python ex$*/$(SCRIPT_$*) $(ARGS)
+
+define CASES_00
+from S1E9 import Character, Stark
+Ned = Stark("Ned")
+print(Ned.__dict__)
+print(Ned.is_alive)
+Ned.die()
+print(Ned.is_alive)
+print(Ned.__doc__)
+print(Ned.__init__.__doc__)
+print(Ned.die.__doc__)
+print("---")
+Lyanna = Stark("Lyanna", False)
+print(Lyanna.__dict__)
+endef
+
+define CASES_01
+from S1E7 import Baratheon, Lannister
+Robert = Baratheon("Robert")
+print(Robert.__dict__)
+print(Robert.__str__)
+print(Robert.__repr__)
+print(Robert.is_alive)
+Robert.die()
+print(Robert.is_alive)
+print(Robert.__doc__)
+print("---")
+Cersei = Lannister("Cersei")
+print(Cersei.__dict__)
+print(Cersei.__str__)
+print(Cersei.is_alive)
+print("---")
+Jaine = Lannister.create_lannister("Jaine", True)
+print(f"Name : {Jaine.first_name, type(Jaine).__name__}, Alive : {Jaine.is_alive}")
+endef
+
+define CASES_02
+from DiamondTrap import King
+Joffrey = King("Joffrey")
+print(Joffrey.__dict__)
+Joffrey.set_eyes("blue")
+Joffrey.set_hairs("light")
+print(Joffrey.get_eyes())
+print(Joffrey.get_hairs())
+print(Joffrey.__dict__)
+endef
+
+define CASES_03
+from ft_calculator import calculator
+v1 = calculator([0.0, 1.0, 2.0, 3.0, 4.0, 5.0])
+v1 + 5
+print("---")
+v2 = calculator([0.0, 1.0, 2.0, 3.0, 4.0, 5.0])
+v2 * 5
+print("---")
+v3 = calculator([10.0, 15.0, 20.0])
+v3 - 5
+v3 / 5
+endef
+
+define CASES_04
+from ft_calculator import calculator
+a = [5, 10, 2]
+b = [2, 4, 3]
+calculator.dotproduct(a,b)
+calculator.add_vec(a,b)
+calculator.sous_vec(a,b)
+endef
+
+include ../tester.mk

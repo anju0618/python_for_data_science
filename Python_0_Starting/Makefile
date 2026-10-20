@@ -1,7 +1,7 @@
 ARGS ?=
 
-SCRIPT_00 := Hello.py
-SCRIPT_01 := format_ft_time.py
+SCRIPT_00 := tester.py
+SCRIPT_01 := tester.py
 SCRIPT_02 := tester.py
 SCRIPT_03 := tester.py
 SCRIPT_04 := tester.py
@@ -11,15 +11,13 @@ SCRIPT_07 := tester.py
 SCRIPT_08 := tester.py
 
 NUMS := 00 01 02 03 04 05 06 07 08
+EXS := $(NUMS)
 RUNS := $(addprefix run-,$(NUMS))
 
-.PHONY: install tester lint clean fclean $(RUNS)
+.PHONY: install lint clean fclean $(RUNS)
 
 install:
 	uv sync
-
-tester:
-	@for d in testers/ex*/; do cp -f $$d* $${d#testers/}; done
 
 lint:
 	uv run flake8 --exclude=.venv .
@@ -41,3 +39,87 @@ fclean: clean
 
 $(RUNS): run-%: tester
 	uv run python ex$*/$(SCRIPT_$*) $(ARGS)
+
+define CASES_00
+$(T_SH)
+
+sh("ex00/Hello.py | cat -e")
+endef
+
+define CASES_01
+$(T_SH)
+
+sh("ex01/format_ft_time.py | cat -e")
+endef
+
+define CASES_02
+from find_ft_type import all_thing_is_obj
+ft_list = ["Hello", "tata!"]
+ft_tuple = ("Hello", "toto!")
+ft_set   = {"Hello", "tutu!"}
+ft_dict = {"Hello" : "titi!"}
+all_thing_is_obj(ft_list)
+all_thing_is_obj(ft_tuple)
+all_thing_is_obj(ft_set)
+all_thing_is_obj(ft_dict)
+all_thing_is_obj("Brian")
+all_thing_is_obj("Toto")
+print(all_thing_is_obj(10))
+endef
+
+define CASES_03
+from NULL_not_found import NULL_not_found
+Nothing = None
+Garlic = float("NaN")
+Zero    = 0
+Empty   = ""
+Fake    = False
+NULL_not_found(Nothing)
+NULL_not_found(Garlic)
+NULL_not_found(Zero)
+NULL_not_found(Empty)
+NULL_not_found(Fake)
+print(NULL_not_found("Brian"))
+endef
+
+define CASES_04
+$(T_SH)
+
+sh("ex04/whatis.py 14")
+sh("ex04/whatis.py -5")
+sh("ex04/whatis.py")
+sh("ex04/whatis.py 0")
+sh("ex04/whatis.py Hi!")
+sh("ex04/whatis.py 13 5")
+endef
+
+define CASES_05
+$(T_SH)
+
+sh("ex05/building.py \"Python 3.0, released in 2008, was a major revision that is not completely backward compatible with earlier versions. Python 2 was discontinued with version 2.7.18 in 2020.\"")
+sh('ex05/building.py', 'echo "Hello World!" | ')
+endef
+
+define CASES_06
+$(T_SH)
+
+sh("ex06/sos.py \"sos\" | cat -e")
+sh("ex06/sos.py 'h$$llo'")
+endef
+
+define CASES_07
+$(T_SH)
+
+sh("ex07/filterstring.py 'Hello the World' 4")
+sh("ex07/filterstring.py 'Hello the World' 99")
+sh("ex07/filterstring.py 3 'Hello the World'")
+sh("ex07/filterstring.py")
+endef
+
+define CASES_08
+from ft_filter import ft_filter
+
+print(list(ft_filter(lambda x: x % 2 == 0, range(10))))
+endef
+
+include ../tester.mk
